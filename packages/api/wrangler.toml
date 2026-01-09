@@ -1,0 +1,63 @@
+name = "site-builder-api"
+main = "src/index.ts"
+compatibility_date = "2023-12-01"
+
+# Staging environment
+[env.staging]
+name = "site-builder-api-staging"
+vars = { ENVIRONMENT = "staging" }
+
+[[env.staging.d1_databases]]
+binding = "DB"
+database_name = "site-builder-staging"
+database_id = "your-staging-d1-id"
+
+[[env.staging.kv_namespaces]]
+binding = "CACHE"
+id = "your-staging-kv-cache-id"
+
+[[env.staging.kv_namespaces]]
+binding = "CONFIG"
+id = "your-staging-kv-config-id"
+
+[[env.staging.r2_buckets]]
+binding = "UPLOADS"
+bucket_name = "site-builder-uploads-staging"
+
+[[env.staging.queues.producers]]
+binding = "PUBLISH_QUEUE"
+queue = "site-builder-publish-staging"
+
+[[env.staging.queues.producers]]
+binding = "DUNNING_QUEUE"
+queue = "site-builder-dunning-staging"
+
+# Production environment
+[env.production]
+name = "site-builder-api"
+vars = { ENVIRONMENT = "production" }
+
+[[env.production.d1_databases]]
+binding = "DB"
+database_name = "site-builder-production"
+database_id = "your-production-d1-id"
+
+[[env.production.kv_namespaces]]
+binding = "CACHE"
+id = "your-production-kv-cache-id"
+
+[[env.production.kv_namespaces]]
+binding = "CONFIG"
+id = "your-production-kv-config-id"
+
+[[env.production.r2_buckets]]
+binding = "UPLOADS"
+bucket_name = "site-builder-uploads-production"
+
+[[env.production.queues.producers]]
+binding = "PUBLISH_QUEUE"
+queue = "site-builder-publish-production"
+
+[[env.production.queues.producers]]
+binding = "DUNNING_QUEUE"
+queue = "site-builder-dunning-production"

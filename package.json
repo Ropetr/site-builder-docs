@@ -1,0 +1,33 @@
+{
+  "name": "site-builder-saas",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Site Builder SaaS - Complete MVP for Production",
+  "workspaces": [
+    "packages/*",
+    "packages/workers/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "setup": "bash scripts/setup.sh",
+    "migrate": "bash scripts/migrate.sh",
+    "seed": "bash scripts/seed.sh"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "turbo": "^1.11.0",
+    "typescript": "^5.3.3",
+    "vitest": "^1.0.4",
+    "prettier": "^3.1.1",
+    "eslint": "^8.56.0"
+  },
+  "packageManager": "pnpm@8.12.0",
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  }
+}
