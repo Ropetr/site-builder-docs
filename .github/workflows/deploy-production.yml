@@ -1,0 +1,68 @@
+
+name: Deploy Production
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    timeout-minutes: 40
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install
+        run: npm ci
+
+      - name: Build
+        run: npm run build --if-present
+
+      # Optional: D1 migrations (production) — keep guarded
+      - name: Apply D1 migrations (production)
+        if: ${{ vars.RUN_D1_MIGRATIONS == 'true' }}
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          command: d1 migrations apply ${{ vars.D1_DB_NAME }} --remote
+
+      - name: Deploy Workers API (production)
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          command: deploy --env production
+
+      - name: Deploy Pages (editor)
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          projectName: ${{ vars.CF_PAGES_PROJECT_EDITOR }}
+          directory: ./apps/editor-web/dist
+
+      - name: Deploy Pages (published runtime) (optional)
+        if: ${{ vars.CF_PAGES_PROJECT_PUBLISHED != '' }}
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          projectName: ${{ vars.CF_PAGES_PROJECT_PUBLISHED }}
+          directory: ./apps/published-site-runtime/dist
+
+      - name: Smoke test API
+        run: |
+          curl -fsSL "${{ vars.API_BASE_URL }}/health"

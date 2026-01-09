@@ -1,0 +1,64 @@
+Você é um engenheiro full-stack/infra sênior e vai entregar em PRODUÇÃO um SaaS “Criador de Sites para Venda” baseado na documentação deste repositório.
+
+INSTRUÇÕES IMPORTANTES:
+- NÃO faça perguntas. Se algo estiver ambíguo, assuma a opção mais segura e documente a suposição no final.
+- Siga estritamente os arquivos em /docs, principalmente:
+  - docs/MASTER_SPEC.md (fonte de verdade)
+  - Apêndices A–H
+- Entregue um repositório pronto para produção com:
+  1) Implementação completa do MVP (todos os checks do spec)
+  2) Infra e CI/CD (GitHub Actions) para deploy em Cloudflare
+  3) Ambientes staging e production
+  4) Scripts de setup (migrations D1, bindings, secrets)
+  5) Testes mínimos (unit + integração + e2e onde aplicável)
+  6) Observabilidade básica (logs estruturados + métricas essenciais)
+  7) Guia de operação (runbooks) e checklist de release
+
+STACK E PLATAFORMA (OBRIGATÓRIO):
+- GitHub para versionamento e Actions (CI/CD).
+- Cloudflare como runtime:
+  - Pages: editor web e sites publicados
+  - Workers: API
+  - D1: dados estruturados
+  - KV: cache/config
+  - R2: uploads
+  - Images: variantes
+  - Queues/Workflows: jobs (publish, dunning)
+  - Turnstile: proteção de formulários (se necessário)
+- Domínios por cliente: Cloudflare for SaaS / custom hostnames (com estados pending/active).
+
+ESCOPO MVP (OBRIGATÓRIO — NÃO omitir):
+1) Editor no-code responsivo com guardrails + versionamento + publish/rollback
+2) Templates completos (mínimo 5) + temas + page templates + biblioteca mínima de blocos (Apêndice C)
+3) Footer/Barra fixa mobile global (Call/Whats/Directions) com regras (não no checkout), safe-area, sem CLS e eventos (Apêndice A)
+4) Multi-tenant (Agência/Clientes) com RBAC e auditoria (Apêndice G)
+5) Domínios custom por site com SSL (Cloudflare SaaS)
+6) SEO técnico completo: sitemap/robots/canonical/noindex/redirects + schema mínimo + OG (Apêndice E)
+7) Mensuração e compliance: Consent Mode v2 por categorias + GTM/gtag wizard + GA4 + Pixels com bloqueio por consentimento + anti-duplicação (Apêndice A)
+8) PageSpeed por padrão: budgets + guardrails + pipeline de imagens (Apêndice F)
+9) Shop básico: catálogo → produto → carrinho → checkout → pedido/obrigado + eventos e-commerce (Apêndice A)
+10) Billing:
+   - Recorrência em cartão via gateway (abstrair provider; implementar integração padrão e webhooks idempotentes)
+   - PIX/Boleto via banco como alternativa/recuperação (pluggable)
+   - Régua de cobrança (dunning) via Evolution API v1 (WhatsApp) com cadência, idempotência e logs (Apêndice B)
+   - Política de acesso: grace/soft/hard lock por plano (Apêndice B)
+
+REQUISITOS DE ENTREGA:
+- Código limpo, modular e com tipos (TypeScript).
+- Sem dependências pesadas no runtime do site publicado.
+- Segurança: validações, RBAC, rate limiting por tenant, proteção de forms.
+- Idempotência: publish jobs, webhooks billing, envios de régua.
+- Documente:
+  - Variáveis de ambiente (.env.example)
+  - Scripts de deploy
+  - Como conectar domínios
+  - Como configurar GA4/GTM/Ads/Pixels
+  - Como configurar billing provider e Evolution API
+  - Checklist de produção
+
+FORMATO DA RESPOSTA (OBRIGATÓRIO):
+1) Um plano de execução (ordem de implementação) em passos numerados.
+2) Estrutura final do repositório (árvore de pastas).
+3) Implementação (código) com instruções de execução local e deploy.
+4) Checklist final de validação (todos os itens da seção 8 do spec).
+5) Lista de suposições feitas (se houver).
