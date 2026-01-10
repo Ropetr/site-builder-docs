@@ -1,0 +1,27 @@
+name = "site-builder-runtime"
+main = "src/index.ts"
+compatibility_date = "2023-12-01"
+
+[env.staging]
+name = "site-builder-runtime-staging"
+vars = { ENVIRONMENT = "staging" }
+
+[[env.staging.r2_buckets]]
+binding = "SITES"
+bucket_name = "site-builder-sites-staging"
+
+[[env.staging.kv_namespaces]]
+binding = "CACHE"
+id = "staging-cache-id-placeholder"
+
+[env.production]
+name = "site-builder-runtime"
+vars = { ENVIRONMENT = "production" }
+
+[[env.production.r2_buckets]]
+binding = "SITES"
+bucket_name = "site-builder-sites-production"
+
+[[env.production.kv_namespaces]]
+binding = "CACHE"
+id = "production-cache-id-placeholder"
