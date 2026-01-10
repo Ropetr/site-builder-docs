@@ -1,7 +1,13 @@
 /**
  * Site Builder SaaS - API Worker
- * Main entry point
+ * Main entry point with Hono router
  */
+
+import { Hono } from 'hono';
+import { cors } from 'hono/cors';
+import auth from './routes/auth';
+import tenants from './routes/tenants';
+import sites from './routes/sites';
 
 export interface Env {
   DB: D1Database;
@@ -12,41 +18,38 @@ export interface Env {
   ENVIRONMENT: string;
 }
 
-export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
-    const url = new URL(request.url);
+const app = new Hono<{ Bindings: Env }>();
 
-    // CORS headers
-    const corsHeaders = {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-    };
+// CORS
+app.use('/*', cors());
 
-    if (request.method === 'OPTIONS') {
-      return new Response(null, { headers: corsHeaders });
-    }
+// Health check
+app.get('/health', (c) => {
+  return c.json({
+    status: 'ok',
+    environment: c.env.ENVIRONMENT || 'unknown',
+    version: '1.0.0',
+    timestamp: new Date().toISOString(),
+  });
+});
 
-    // Health check
-    if (url.pathname === '/health') {
-      return Response.json({
-        status: 'ok',
-        environment: env.ENVIRONMENT || 'unknown',
-        version: '1.0.0',
-        timestamp: new Date().toISOString(),
-      }, { headers: corsHeaders });
-    }
+// Routes
+app.route('/auth', auth);
+app.route('/tenants', tenants);
+app.route('/sites', sites);
 
-    // API routes (to be implemented in M1)
-    if (url.pathname.startsWith('/api/')) {
-      return Response.json({
-        error: 'API endpoints not yet implemented',
-        message: 'Coming in M1',
-      }, { status: 501, headers: corsHeaders });
-    }
+// 404
+app.notFound((c) => {
+  return c.json({ error: 'Not found' }, 404);
+});
 
-    return Response.json({
-      error: 'Not found',
-    }, { status: 404, headers: corsHeaders });
-  },
-};
+// Error handler
+app.onError((err, c) => {
+  console.error('API Error:', err);
+  return c.json({
+    error: 'Internal server error',
+    message: err.message,
+  }, 500);
+});
+
+export default app;
