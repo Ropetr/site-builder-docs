@@ -21,19 +21,25 @@
 
 ## M0: Repo Executável + Infra + Health Endpoints
 
-### Status: ✅ In Progress
+### Status: ✅ M0.1 Code Complete (Deploy Pending)
 
 ### What's Implemented
 - [x] Monorepo structure with pnpm workspaces
-- [x] packages/shared with types and constants
-- [x] packages/api with /health endpoint
-- [x] packages/runtime with /health endpoint
-- [x] TypeScript configuration
+- [x] packages/shared with types, constants, and TESTS
+- [x] packages/api with /health endpoint and TESTS
+- [x] packages/runtime with /health endpoint and TESTS
+- [x] TypeScript configuration with declaration generation
 - [x] Turbo build orchestration
+- [x] ESLint + Prettier + Vitest (real tooling)
+- [x] Real build/test/lint scripts (no placeholders)
+- [x] DEPLOY.md comprehensive guide
+- [ ] Cloudflare resources created (requires manual setup)
 - [ ] D1 migrations applied
 - [ ] Deploy to staging
 - [ ] Deploy to production
-- [ ] CI/CD workflows validated
+- [ ] CI/CD workflows validated with secrets
+
+**See M0_MANUAL_STEPS.md for deployment instructions**
 
 ### How to Test Locally
 
