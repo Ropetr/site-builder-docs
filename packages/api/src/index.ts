@@ -10,6 +10,8 @@ import tenants from './routes/tenants';
 import sites from './routes/sites';
 import templates from './routes/templates';
 import blocks from './routes/blocks';
+import pages from './routes/pages';
+import publish from './routes/publish';
 
 export interface Env {
   DB: D1Database;
@@ -41,6 +43,8 @@ app.route('/tenants', tenants);
 app.route('/sites', sites);
 app.route('/templates', templates);
 app.route('/blocks', blocks);
+app.route('/pages', pages);
+app.route('/publish', publish);
 
 // 404
 app.notFound((c) => {

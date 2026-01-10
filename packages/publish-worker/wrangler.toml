@@ -1,0 +1,43 @@
+name = "site-builder-publish-worker"
+main = "src/index.ts"
+compatibility_date = "2024-01-01"
+
+# Queue consumer configuration
+[[queues.consumers]]
+queue = "publish-queue"
+max_batch_size = 10
+max_batch_timeout = 30
+max_retries = 3
+dead_letter_queue = "publish-dlq"
+
+[env.staging]
+name = "site-builder-publish-worker-staging"
+
+[[env.staging.d1_databases]]
+binding = "DB"
+database_name = "site-builder-staging"
+database_id = "TBD"
+
+[[env.staging.kv_namespaces]]
+binding = "CACHE"
+id = "TBD"
+
+[[env.staging.r2_buckets]]
+binding = "SITES"
+bucket_name = "site-builder-sites-staging"
+
+[env.production]
+name = "site-builder-publish-worker-production"
+
+[[env.production.d1_databases]]
+binding = "DB"
+database_name = "site-builder-production"
+database_id = "TBD"
+
+[[env.production.kv_namespaces]]
+binding = "CACHE"
+id = "TBD"
+
+[[env.production.r2_buckets]]
+binding = "SITES"
+bucket_name = "site-builder-sites-production"
