@@ -12,6 +12,9 @@ import templates from './routes/templates';
 import blocks from './routes/blocks';
 import pages from './routes/pages';
 import publish from './routes/publish';
+import domains from './routes/domains';
+import seo from './routes/seo';
+import billing from './routes/billing';
 
 export interface Env {
   DB: D1Database;
@@ -45,6 +48,9 @@ app.route('/templates', templates);
 app.route('/blocks', blocks);
 app.route('/pages', pages);
 app.route('/publish', publish);
+app.route('/domains', domains);
+app.route('/seo', seo);
+app.route('/billing', billing);
 
 // 404
 app.notFound((c) => {
