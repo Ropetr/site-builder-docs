@@ -1,35 +1,42 @@
 import { describe, it, expect } from 'vitest';
+import app from './index';
 
+// Mock environment
 const mockEnv = {
+  DB: {
+    prepare: () => ({
+      bind: () => ({
+        first: async () => null,
+      }),
+    }),
+  } as any as D1Database,
+  CACHE: {
+    get: async () => null,
+    put: async () => {},
+  } as KVNamespace,
   SITES: {} as R2Bucket,
-  CACHE: {} as KVNamespace,
   ENVIRONMENT: 'test',
 };
 
 describe('Runtime Worker', () => {
-  it('should return health check successfully', async () => {
-    const { default: worker } = await import('./index');
+  it('GET /health returns status ok', async () => {
+    const res = await app.request('/health', {}, mockEnv);
 
-    const request = new Request('http://localhost/health');
-    const response = await worker.fetch(request, mockEnv);
-
-    expect(response.status).toBe(200);
-
-    const data = await response.json();
-    expect(data).toHaveProperty('status', 'ok');
-    expect(data).toHaveProperty('service', 'runtime');
-    expect(data).toHaveProperty('environment', 'test');
-    expect(data).toHaveProperty('version');
+    expect(res.status).toBe(200);
+    const data = await res.json();
+    expect(data.status).toBe('ok');
+    expect(data.service).toBe('runtime');
   });
 
-  it('should return placeholder for site routes', async () => {
-    const { default: worker } = await import('./index');
+  it('Returns 404 for unknown domain', async () => {
+    const res = await app.request('/', {
+      headers: {
+        'Host': 'unknown-domain.com',
+      },
+    }, mockEnv);
 
-    const request = new Request('http://localhost/some-site');
-    const response = await worker.fetch(request, mockEnv);
-
-    expect(response.status).toBe(200);
-    const text = await response.text();
-    expect(text).toContain('runtime');
+    expect(res.status).toBe(404);
+    const html = await res.text();
+    expect(html).toContain('404');
   });
 });

@@ -8,6 +8,8 @@ import { cors } from 'hono/cors';
 import auth from './routes/auth';
 import tenants from './routes/tenants';
 import sites from './routes/sites';
+import templates from './routes/templates';
+import blocks from './routes/blocks';
 
 export interface Env {
   DB: D1Database;
@@ -37,6 +39,8 @@ app.get('/health', (c) => {
 app.route('/auth', auth);
 app.route('/tenants', tenants);
 app.route('/sites', sites);
+app.route('/templates', templates);
+app.route('/blocks', blocks);
 
 // 404
 app.notFound((c) => {
