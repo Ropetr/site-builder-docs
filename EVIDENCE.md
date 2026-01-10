@@ -45,18 +45,35 @@ cd site-builder-docs
 # Install dependencies
 pnpm install
 
-# Type check
-pnpm typecheck
+# Run all checks
+pnpm run lint        # ESLint on all packages
+pnpm run typecheck   # TypeScript check
+pnpm run test        # Vitest tests
+pnpm run build       # Build all packages
 
-# Test API locally (requires wrangler)
+# Test API locally (requires wrangler CLI)
 cd packages/api
-npx wrangler dev
+pnpm run dev
 # Visit http://localhost:8787/health
 
 # Test Runtime locally
 cd packages/runtime
-npx wrangler dev
+pnpm run dev
 # Visit http://localhost:8787/health
+```
+
+### Deploy to Staging
+
+```bash
+# Requires Cloudflare account and wrangler CLI logged in
+
+# API
+cd packages/api
+pnpm run deploy:staging
+
+# Runtime
+cd packages/runtime
+pnpm run deploy:staging
 ```
 
 ### Expected /health Response

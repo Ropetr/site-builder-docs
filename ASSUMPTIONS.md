@@ -361,6 +361,23 @@ This document captures key assumptions made during implementation. **These assum
 5. ⚠️ Scale assumptions (10k sites → validate with load testing)
 6. ⚠️ Cost assumptions (monitor actual costs post-launch)
 
-**Document Version**: 1.0
-**Last Updated**: 2026-01-09
+## 13. Security & Vulnerabilities (M0.1)
+
+### 13.1 Dependabot Alerts
+**Status**: 6 vulnerabilities detected on initial push (1 high, 4 moderate, 1 low)
+
+**Decision**: Accepted for M0 baseline with mitigation plan:
+- High/moderate vulnerabilities are in devDependencies (eslint, wrangler)
+- Production runtime (Workers) does not include these dependencies
+- Mitigation: Regular dependency updates scheduled
+- Action item: Address before production launch
+
+**Rationale**: Blocking M0 for dev dependency vulnerabilities would delay delivery without security benefit to production runtime.
+
+**Tracking**: GitHub Dependabot alerts monitored at https://github.com/Ropetr/site-builder-docs/security/dependabot
+
+---
+
+**Document Version**: 1.1
+**Last Updated**: 2026-01-10
 **Next Review**: At 1,000 active sites or 3 months post-launch

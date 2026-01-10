@@ -2,13 +2,17 @@
   "name": "@site-builder/shared",
   "version": "1.0.0",
   "private": true,
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
+    "build": "tsc",
     "typecheck": "tsc --noEmit",
-    "lint": "echo 'Lint OK'"
+    "lint": "eslint src --ext .ts",
+    "test": "vitest run"
   },
   "devDependencies": {
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "eslint": "^8.56.0",
+    "vitest": "^1.0.4"
   }
 }
